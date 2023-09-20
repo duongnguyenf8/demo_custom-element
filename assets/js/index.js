@@ -77,6 +77,8 @@ function CodeSnippet() {
       loadScript(
         'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js'
       ),
+      loadScript('https://unpkg.com/prettier@3.0.3/standalone.js'),
+      loadScript('https://unpkg.com/prettier@3.0.3/plugins/html.js'),
     ]).then(() => {
       // Lấy ra textarea và khởi tạo CodeMirror
       shadowRoot.textarea =
@@ -184,10 +186,13 @@ CodeSnippet.prototype.reset = function () {
  * Updates the content of the CodeMirror editor and the iframe.
  * @param {string} value - The new content of the code snippet.
  */
-CodeSnippet.prototype.updateContent = function (value) {
+CodeSnippet.prototype.updateContent = async function (value) {
   if (!value) value = this.CodeMirror.getValue();
-  value = value.replaceAll('      ', ''); // Loại bỏ các khoảng trắng thụt đầu dòng
-  this.CodeMirror.setValue(value);
+  const formattedCode = await prettier.format(value, {
+    parser: 'html',
+    plugins: prettierPlugins,
+  });
+  this.CodeMirror.setValue(formattedCode);
   this.updateIframe();
 };
 
@@ -195,7 +200,7 @@ CodeSnippet.prototype.updateContent = function (value) {
  * Saves the content of the textarea when the user presses Ctrl + S.
  * @param {Event} event - The keydown event.
  */
-CodeSnippet.prototype.handleContent = function (event) {
+CodeSnippet.prototype.handleContent = async function (event) {
   if (event.ctrlKey || event.metaKey) {
     event.preventDefault();
     if (event.key === 's') {
@@ -216,6 +221,16 @@ CodeSnippet.prototype.handleContent = function (event) {
     if (event.key === 'r') {
       this.reset();
     }
+  }
+  if (event.altKey && event.shiftKey) {
+    // format code with prettier lib
+    event.preventDefault();
+    const code = this.CodeMirror.getValue();
+    const formattedCode = await prettier.format(code, {
+      parser: 'html',
+      plugins: prettierPlugins,
+    });
+    this.updateContent(formattedCode);
   }
 };
 
