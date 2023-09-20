@@ -12,11 +12,56 @@
   </head>
   <body>
     <code-snippet>
-      <button id="btn">hello</button>
+      <button>Run Code</button>
       <script>
-        btn.onclick = function () {
-          // alert(1);
+        const btn = document.querySelector('button');
+        const randomColor = (type) => {
+          const r = Math.floor(Math.random() * 128 + (type === 'light' && 128));
+          const g = Math.floor(Math.random() * 128 + (type === 'light' && 128));
+          const b = Math.floor(Math.random() * 128 + (type === 'light' && 128));
+          return `rgb(${r}, ${g}, ${b})`;
         };
+        btn.onclick = () => {
+          btn.style.backgroundColor = randomColor('light');
+          btn.style.color = randomColor();
+        };
+      </script>
+    </code-snippet>
+    <code-snippet>
+      <button>Run Code</button>
+      <p class="dice"></p>
+      <p class="dice"></p>
+      <p class="dice"></p>
+      <script>
+        const btn = document.querySelector('button');
+        const dice = document.querySelectorAll('.dice');
+        const sides = ['Một', 'Hai', 'Ba', 'Bốn', 'Năm', 'Sáu'];
+        const roll = () => {
+          const random = Math.floor(Math.random() * sides.length);
+          return sides[random];
+        };
+        btn.onclick = () => {
+          const start = performance.now();
+
+          let previousTime = 0,
+            startTime = performance.now(),
+            stop = false;
+          const duration = 100,
+            timeout = 1500;
+          const update = (currentTime) => {
+            if (currentTime - previousTime >= duration && !stop) {
+              dice.forEach((die) => {
+                die.className = 'dice';
+                die.innerText = roll();
+              });
+              previousTime = currentTime;
+            }
+            if (currentTime - startTime <= timeout)
+              requestAnimationFrame(update);
+            else stop = true;
+          };
+          requestAnimationFrame(update);
+        }; // Cách 2: Sử dụng requestAnimationFrame
       </script>
     </code-snippet>
     <script src="assets/js/templateHTML.js"></script>

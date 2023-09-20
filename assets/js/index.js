@@ -37,74 +37,94 @@ function CodeSnippet() {
   };
 
   // Load các script cần thiết và sau đó thực hiện các thao tác cần thiết
-  Promise.all([
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/selection/active-line.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js'
-    ),
-    loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closetag.min.js'
-    ),
-  ]).then(() => {
-    // Lấy ra textarea và khởi tạo CodeMirror
-    shadowRoot.textarea = shadowRoot.shadowRoot.querySelector('textarea#code');
-    shadowRoot.CodeMirror = CodeMirror.fromTextArea(shadowRoot.textarea, {
-      mode: 'htmlmixed',
-      theme: 'dracula',
-      lineNumbers: true,
-      styleActiveLine: true,
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      autoCloseTags: true,
-    });
+  loadScript(
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js'
+  ).then(() =>
+    Promise.all([
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/selection/active-line.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closetag.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/jump-to-line.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js'
+      ),
+    ]).then(() => {
+      // Lấy ra textarea và khởi tạo CodeMirror
+      shadowRoot.textarea =
+        shadowRoot.shadowRoot.querySelector('textarea#code');
+      shadowRoot.CodeMirror = CodeMirror.fromTextArea(shadowRoot.textarea, {
+        mode: 'htmlmixed',
+        theme: 'dracula',
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+        // add search
+        extraKeys: {
+          'Ctrl-/': 'toggleComment',
+        },
+      });
 
-    // Lấy ra các phần tử cần thiết
-    shadowRoot.textarea = shadowRoot.shadowRoot.querySelector('.CodeMirror');
-    shadowRoot.iframe = shadowRoot.shadowRoot.querySelector('iframe');
-    shadowRoot.resetButton = shadowRoot.shadowRoot.querySelector('button');
-    shadowRoot.innerContent = shadowRoot.innerHTML.trim();
+      // Lấy ra các phần tử cần thiết
+      shadowRoot.textarea = shadowRoot.shadowRoot.querySelector('.CodeMirror');
+      shadowRoot.iframe = shadowRoot.shadowRoot.querySelector('iframe');
+      shadowRoot.resetButton = shadowRoot.shadowRoot.querySelector('button');
+      shadowRoot.innerContent = shadowRoot.innerHTML.trim();
+      // Nếu có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
+      if (shadowRoot.innerContent) {
+        shadowRoot.iframe.srcdoc = shadowRoot.innerContent;
+        shadowRoot.updateContent(shadowRoot.innerContent);
+        shadowRoot.innerHTML = '';
+      } else {
+        // Nếu không có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
+        shadowRoot.iframe.srcdoc = ' ';
+        shadowRoot.updateContent(' ');
+      }
 
-    // Nếu có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
-    if (shadowRoot.innerContent) {
-      shadowRoot.iframe.srcdoc = shadowRoot.innerContent;
-      shadowRoot.updateContent(shadowRoot.innerContent);
-      shadowRoot.innerHTML = '';
-    }
-
-    // Gắn các sự kiện cần thiết
-    shadowRoot.textarea.addEventListener(
-      'keydown',
-      shadowRoot.debounce(shadowRoot.updateIframe, 200).bind(shadowRoot)
-    );
-    shadowRoot.resetButton.addEventListener(
-      'click',
-      shadowRoot.reset.bind(shadowRoot)
-    );
-    shadowRoot.shadowRoot.addEventListener(
-      'keydown',
-      shadowRoot.saveContent.bind(shadowRoot)
-    );
-  });
+      // Gắn các sự kiện cần thiết
+      shadowRoot.CodeMirror.on('keyup', function () {
+        shadowRoot.debounce(shadowRoot.updateIframe, 200).bind(shadowRoot)();
+      });
+      shadowRoot.resetButton.addEventListener(
+        'click',
+        shadowRoot.reset.bind(shadowRoot)
+      );
+      shadowRoot.shadowRoot.addEventListener(
+        'keydown',
+        shadowRoot.handleContent.bind(shadowRoot)
+      );
+    })
+  );
 
   return shadowRoot;
 }
@@ -157,6 +177,7 @@ CodeSnippet.prototype.updateIframe = function () {
 CodeSnippet.prototype.reset = function () {
   const srcDoc = this.iframe.srcdoc;
   this.updateContent(srcDoc);
+  this.CodeMirror.focus();
 };
 
 /**
@@ -174,7 +195,7 @@ CodeSnippet.prototype.updateContent = function (value) {
  * Saves the content of the textarea when the user presses Ctrl + S.
  * @param {Event} event - The keydown event.
  */
-CodeSnippet.prototype.saveContent = function (event) {
+CodeSnippet.prototype.handleContent = function (event) {
   if (event.ctrlKey && event.key === 's') {
     event.preventDefault();
     const code = this.CodeMirror.getValue();
@@ -190,6 +211,10 @@ CodeSnippet.prototype.saveContent = function (event) {
     a.download = fileName + '.html';
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+  if (event.ctrlKey && event.key === 'r') {
+    event.preventDefault();
+    this.reset();
   }
 };
 
