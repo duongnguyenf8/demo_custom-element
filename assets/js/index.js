@@ -196,25 +196,26 @@ CodeSnippet.prototype.updateContent = function (value) {
  * @param {Event} event - The keydown event.
  */
 CodeSnippet.prototype.handleContent = function (event) {
-  if (event.ctrlKey && event.key === 's') {
+  if (event.ctrlKey || event.metaKey) {
     event.preventDefault();
-    const code = this.CodeMirror.getValue();
-    const fileName = code.replaceAll(' ', '').slice(0, 5);
-    const fileContent = code;
-    navigator.clipboard.writeText(fileContent);
-    const blob = new Blob([fileContent], {
-      type: 'text/html',
-    });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName + '.html';
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
-  if (event.ctrlKey && event.key === 'r') {
-    event.preventDefault();
-    this.reset();
+    if (event.key === 's') {
+      const code = this.CodeMirror.getValue();
+      const fileName = code.replaceAll(' ', '').slice(0, 5);
+      const fileContent = code;
+      navigator.clipboard.writeText(fileContent);
+      const blob = new Blob([fileContent], {
+        type: 'text/html',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName + '.html';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+    if (event.key === 'r') {
+      this.reset();
+    }
   }
 };
 
@@ -223,8 +224,10 @@ CodeSnippet.prototype.handleContent = function (event) {
  * @param {Event} event - The keydown event.
  */
 window.addEventListener('keydown', function (event) {
-  if (event.ctrlKey && event.key === 's') {
-    event.preventDefault();
+  if (event.ctrlKey || event.metaKey) {
+    if (event.key === 's') {
+      event.preventDefault();
+    }
   }
 });
 
