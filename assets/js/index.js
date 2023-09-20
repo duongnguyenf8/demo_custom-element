@@ -91,10 +91,6 @@ function CodeSnippet() {
         matchBrackets: true,
         autoCloseBrackets: true,
         autoCloseTags: true,
-        // add search
-        extraKeys: {
-          'Ctrl-/': 'toggleComment',
-        },
       });
 
       // Lấy ra các phần tử cần thiết
@@ -220,6 +216,11 @@ CodeSnippet.prototype.handleContent = async function (event) {
     }
     if (event.key === 'r') {
       this.reset();
+    }
+    if (event.key === '/') {
+      this.CodeMirror.toggleComment({
+        indent: true,
+      });
     }
   }
   if (event.altKey && event.shiftKey) {
