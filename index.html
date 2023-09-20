@@ -11,22 +11,7 @@
     <title>Code Snippet</title>
   </head>
   <body>
-    <code-snippet>
-      <button>Run Code</button>
-      <script>
-        const btn = document.querySelector('button');
-        const randomColor = (type) => {
-          const r = Math.floor(Math.random() * 128 + (type === 'light' && 128));
-          const g = Math.floor(Math.random() * 128 + (type === 'light' && 128));
-          const b = Math.floor(Math.random() * 128 + (type === 'light' && 128));
-          return `rgb(${r}, ${g}, ${b})`;
-        };
-        btn.onclick = () => {
-          btn.style.backgroundColor = randomColor('light');
-          btn.style.color = randomColor();
-        };
-      </script>
-    </code-snippet>
+    <code-snippet></code-snippet>
     <code-snippet>
       <button>Run Code</button>
       <p class="dice"></p>
