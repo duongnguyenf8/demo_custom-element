@@ -1,10 +1,10 @@
-import log from './jsvjp/index.mjs';
-// log(log);
 /**
  * @fileoverview Code snippet component
  * @description A custom HTML element for displaying and editing code snippets.
  * @author Dương Nguyễn
  */
+// Import module 'log' từ đường dẫn './jsvjp/index.mjs'
+import log from './jsvjp/index.mjs';
 
 // Tạo một template cho nội dung code snippet
 const codeSnippetContent = document.createElement('template');
@@ -16,7 +16,10 @@ codeSnippetContent.innerHTML = templateHTML;
  * @extends {HTMLElement}
  */
 function CodeSnippet() {
-  // Tạo một shadow DOM và gán vào element này
+  /**
+   * Tạo một shadow DOM và gán vào element này
+   * @type {ShadowRoot}
+   */
   const shadowRoot = Reflect.construct(HTMLElement, [], this.constructor);
   shadowRoot.attachShadow({ mode: 'open' });
 
@@ -27,6 +30,7 @@ function CodeSnippet() {
    * Loads an external script.
    * @function
    * @param {string} src - The source URL of the script.
+   * @param {string} type - The type of the script (default: 'text/javascript').
    * @returns {Promise} A Promise that resolves when the script is loaded.
    */
   const loadScript = (src, type = 'text/javascript') => {
@@ -42,142 +46,142 @@ function CodeSnippet() {
   // Load các script cần thiết và sau đó thực hiện các thao tác cần thiết
   loadScript(
     'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js'
-  ).then(
-    () =>
-      Promise.all([
-        // text editor
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/selection/active-line.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closetag.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/jump-to-line.min.js'
-        ),
-        loadScript(
-          'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js'
-        ),
-        // format code
-        loadScript('https://unpkg.com/prettier@3.0.3/standalone.js'),
-        loadScript('https://unpkg.com/prettier@3.0.3/plugins/html.js'),
-      ]).then(() => {
-        // Lấy ra textarea và khởi tạo CodeMirror
-        shadowRoot.textarea =
-          shadowRoot.shadowRoot.querySelector('textarea#code');
-        shadowRoot.CodeMirror = CodeMirror.fromTextArea(shadowRoot.textarea, {
-          mode: 'htmlmixed',
-          theme: 'dracula',
-          lineNumbers: true,
-          styleActiveLine: true,
-          matchBrackets: true,
-          autoCloseBrackets: true,
-          autoCloseTags: true,
-        });
+  ).then(() =>
+    Promise.all([
+      // Các mode cho CodeMirror
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/htmlmixed/htmlmixed.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/xml/xml.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/selection/active-line.min.js'
+      ),
+      // Các addon cho CodeMirror
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closetag.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/jump-to-line.min.js'
+      ),
+      loadScript(
+        'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js'
+      ),
+      /// Prettier để định dạng code
+      loadScript('https://unpkg.com/prettier@3.0.3/standalone.js'),
+      loadScript('https://unpkg.com/prettier@3.0.3/plugins/html.js'),
+    ]).then(() => {
+      // Lấy ra textarea và khởi tạo CodeMirror
+      shadowRoot.textarea =
+        shadowRoot.shadowRoot.querySelector('textarea#code');
+      shadowRoot.CodeMirror = CodeMirror.fromTextArea(shadowRoot.textarea, {
+        mode: 'htmlmixed',
+        theme: 'dracula',
+        lineNumbers: true,
+        styleActiveLine: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+      });
 
-        // Lấy ra các phần tử cần thiết
+      /// Lấy ra các phần tử cần thiết
+      // (nhiều phần tử ở đây đã bị gán giá trị trong câu lệnh trên)
 
-        shadowRoot.textarea =
-          shadowRoot.shadowRoot.querySelector('.CodeMirror');
-        shadowRoot.iframeWebview =
-          shadowRoot.shadowRoot.querySelector('iframe#webview');
-        shadowRoot.divConsole =
-          shadowRoot.shadowRoot.querySelector('div#console');
-        shadowRoot.resetButton =
-          shadowRoot.shadowRoot.querySelector('button#resetBtn');
-        shadowRoot.consoleButton =
-          shadowRoot.shadowRoot.querySelector('button#consoleBtn');
-        shadowRoot.innerContent = shadowRoot.innerHTML.trim();
+      shadowRoot.textarea = shadowRoot.shadowRoot.querySelector('.CodeMirror');
+      shadowRoot.iframeWebview =
+        shadowRoot.shadowRoot.querySelector('iframe#webview');
+      shadowRoot.divConsole =
+        shadowRoot.shadowRoot.querySelector('div#console');
+      shadowRoot.resetButton =
+        shadowRoot.shadowRoot.querySelector('button#resetBtn');
+      shadowRoot.consoleButton =
+        shadowRoot.shadowRoot.querySelector('button#consoleBtn');
+      shadowRoot.innerContent = shadowRoot.innerHTML.trim();
 
-        const styleTag = this.createStyle(
-          `
-@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap");
-#console {
-  background:#191a2e;
-  color:#baa4da;
-}
-#console pre{
-  width:100%;
-  height:auto;
-  padding:10px 0;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap
-}
-#console code{width:100%}
-#console .error{color:#f55}
-#console .success{color: #20E3B2;}
-#console .link{color:#58a6ff;text-decoration:none}
-#console * {
-  font-family:"Source Code Pro",monospace;
-}
-#console::-webkit-scrollbar {
-  width: 0
-}
-`
-        );
-        shadowRoot.divConsole.parentElement.insertBefore(
-          styleTag,
-          shadowRoot.divConsole
-        );
-
-        // Nếu có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
-        if (shadowRoot.innerContent) {
-          shadowRoot.iframeWebview.srcdoc = shadowRoot.innerContent;
-          shadowRoot.updateContent(shadowRoot.innerContent);
-          // remove all child of shadowRoot
-          while (shadowRoot.firstChild) {
-            shadowRoot.removeChild(shadowRoot.firstChild);
+      // Thêm CSS tùy chỉnh
+      const styleTag = this.createStyle(
+        `
+          @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap");
+          #console {
+            background:#191a2e;
+            color:#baa4da;
           }
-        } else {
-          // Nếu không có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
-          shadowRoot.iframeWebview.srcdoc = ' ';
-          shadowRoot.updateContent(' ');
-        }
+          #console pre{
+            width:100%;
+            height:auto;
+            padding:10px 0;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            flex-wrap:wrap
+          }
+          #console code{width:100%}
+          #console .error{color:#f55}
+          #console .success{color: #20E3B2;}
+          #console .link{color:#58a6ff;text-decoration:none}
+          #console * {
+            font-family:"Source Code Pro",monospace;
+          }
+          #console::-webkit-scrollbar {
+            width: 0
+          }
+          `
+      );
+      shadowRoot.divConsole.parentElement.insertBefore(
+        styleTag,
+        shadowRoot.divConsole
+      );
 
-        // Gắn các sự kiện cần thiết
-        shadowRoot.CodeMirror.on(
-          'keyup',
-          shadowRoot.debounce(shadowRoot.updateIframe, 300).bind(shadowRoot)
-        );
-        shadowRoot.resetButton.addEventListener(
-          'click',
-          shadowRoot.reset.bind(shadowRoot)
-        );
-        shadowRoot.consoleButton.addEventListener('click', () =>
-          shadowRoot.divConsole.classList.toggle('show')
-        );
-        shadowRoot.shadowRoot.addEventListener(
-          'keydown',
-          shadowRoot.handleContent.bind(shadowRoot)
-        );
-      })
-    // })
+      // Nếu có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
+      if (shadowRoot.innerContent) {
+        shadowRoot.iframeWebview.srcdoc = shadowRoot.innerContent;
+        shadowRoot.updateContent(shadowRoot.innerContent);
+        // remove all child of shadowRoot
+        while (shadowRoot.firstChild) {
+          shadowRoot.removeChild(shadowRoot.firstChild);
+        }
+      } else {
+        // Nếu không có nội dung ban đầu, cập nhật iframe và xóa nội dung trong shadow DOM
+        shadowRoot.iframeWebview.srcdoc = ' ';
+        shadowRoot.updateContent(' ');
+      }
+
+      // Gắn các sự kiện cần thiết
+      shadowRoot.CodeMirror.on(
+        'keyup',
+        shadowRoot.debounce(shadowRoot.updateIframe, 300).bind(shadowRoot)
+      );
+      shadowRoot.resetButton.addEventListener(
+        'click',
+        shadowRoot.reset.bind(shadowRoot)
+      );
+      shadowRoot.consoleButton.addEventListener('click', () =>
+        shadowRoot.divConsole.classList.toggle('show')
+      );
+      shadowRoot.shadowRoot.addEventListener(
+        'keydown',
+        shadowRoot.handleContent.bind(shadowRoot)
+      );
+    })
   );
 
   return shadowRoot;
@@ -227,6 +231,11 @@ CodeSnippet.prototype.updateIframe = function () {
   this.updateConsole(code);
 };
 
+/**
+ * Creates a style element with the given content.
+ * @param {string} content - The CSS content for the style element.
+ * @returns {HTMLStyleElement} The created style element.
+ */
 CodeSnippet.prototype.createStyle = (content) => {
   const style = document.createElement('style');
   style.innerHTML = content.trim();
@@ -296,7 +305,7 @@ CodeSnippet.prototype.updateContent = async function (value) {
 };
 
 /**
- * Saves the content of the textarea when the user presses Ctrl + S.
+ * Handles keydown events for the content.
  * @param {Event} event - The keydown event.
  */
 CodeSnippet.prototype.handleContent = async function (event) {

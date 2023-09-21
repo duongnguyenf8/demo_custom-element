@@ -1,207 +1,140 @@
-# Review of Code
+## Phần 1: Import và Khởi tạo `log`
 
-## File: `index.js`
-
-### Line 1-19: Template HTML and Style
-
-- **Description**: Defines the HTML and CSS template for the code snippet component.
-- **Review**:
-  - The code follows clean and readable HTML and CSS structure.
-  - The use of template strings (`templateStyle` and `templateHTML`) improves code readability.
-  - CSS classes and IDs are named descriptively.
-  - The use of Flexbox for layout is well-implemented.
-
-### Line 21-67: CodeSnippet Class
-
-- **Description**: Defines the `CodeSnippet` class which represents the custom element.
-- **Review**:
-  - The class constructor creates a shadow DOM and appends the template content.
-  - The use of `Reflect.construct` for extending `HTMLElement` is appropriate.
-  - The loading of external scripts is well-handled using Promises.
-  - The initialization of CodeMirror with various modes and addons is thorough.
-
-### Line 69-106: CodeSnippet Prototype Methods
-
-- **Description**: Contains prototype methods for `CodeSnippet` class.
-- **Review**:
-  - `debounce` method efficiently manages function execution delay.
-  - `updateIframe` method updates the iframe content based on CodeMirror value.
-  - `reset` method restores code snippet to its initial state.
-  - `updateContent` method updates both CodeMirror editor and iframe content.
-  - `handleContent` method handles key events for saving and resetting.
-
-### Line 108-128: Event Listener for Ctrl + S
-
-- **Description**: Listens for Ctrl + S to prevent default behavior.
-- **Review**:
-  - The event listener successfully disables default behavior for saving HTML files.
-
-### Line 130-133: Custom Element Definition
-
-- **Description**: Defines the custom element 'code-snippet'.
-- **Review**:
-  - The `customElements.define` method registers the custom element.
-
----
-
-## Tệp: `index.js`
-
-### Dòng 1-19: Mẫu HTML và Kiểu dáng
-
-- **Mô tả**: Xác định mẫu HTML và CSS cho thành phần đoạn code.
-- **Đánh giá**:
-  - mã nguồn tuân thủ cấu trúc HTML và CSS sạch sẽ và dễ đọc.
-  - Sử dụng chuỗi mẫu (`templateStyle` và `templateHTML`) cải thiện khả năng đọc code.
-  - Các lớp và ID CSS được đặt tên một cách mô tả.
-  - Việc sử dụng Flexbox cho bố cục được triển khai tốt.
-
-### Dòng 21-67: Lớp CodeSnippet
-
-- **Mô tả**: Xác định lớp `CodeSnippet` đại diện cho phần tử tùy chỉnh.
-- **Đánh giá**:
-  - Constructor của lớp tạo ra một Shadow DOM và nối nội dung mẫu.
-  - Việc sử dụng `Reflect.construct` để mở rộng `HTMLElement` là thích hợp.
-  - Việc tải các script bên ngoài được xử lý cẩn thận bằng cách sử dụng Promises.
-  - Việc khởi tạo CodeMirror với các mode và addon khác nhau được triển khai rất đầy đủ.
-
-### Dòng 69-106: Phương thức Nguyên mẫu CodeSnippet
-
-- **Mô tả**: Chứa các phương thức nguyên mẫu cho lớp `CodeSnippet`.
-- **Đánh giá**:
-  - Phương thức `debounce` quản lý một cách hiệu quả việc trễ thực thi hàm.
-  - Phương thức `updateIframe` cập nhật nội dung iframe dựa trên giá trị CodeMirror.
-  - Phương thức `reset` khôi phục đoạn code về trạng thái ban đầu của nó.
-  - Phương thức `updateContent` cập nhật cả trình soạn thảo CodeMirror và nội dung iframe.
-  - Phương thức `handleContent` xử lý các sự kiện phím để lưu và đặt lại.
-
-### Dòng 108-128: Trình nghe Sự kiện cho Ctrl + S
-
-- **Mô tả**: Lắng nghe Ctrl + S để ngăn hành vi mặc định.
-- **Đánh giá**:
-  - Trình nghe sự kiện thành công vô hiệu hóa hành vi mặc định để lưu tệp HTML.
-
-### Dòng 130-133: Định nghĩa Phần tử Tùy chỉnh
-
-- **Mô tả**: Định nghĩa phần tử tùy chỉnh 'code-snippet'.
-- **Đánh giá**:
-  - Phương thức `customElements.define` đăng ký phần tử tùy chỉnh.
-
----
-
-# Usage Guide for Code Snippet
-
-## Introduction
-
-The Code Snippet component provides a versatile environment for displaying and editing code snippets. This guide will walk you through detailed instructions on how to use and customize the Code Snippet component.
-
----
-
-## 1. Getting Started
-
-To get started, include the `code-snippet` element in your HTML file as shown below:
-
-```html
-<code-snippet></code-snippet>
+```javascript
+import log from './jsvjp/index.mjs';
 ```
 
-Make sure to link the necessary CSS and JavaScript files for the component to function properly.
+Đây là một lệnh import một module từ một tệp tin khác. Module này được đặt trong một thư mục có tên là `jsvjp` và được gán cho biến `log`.
 
-## 2. Basic Usage
+## Phần 2: Tiêu đề và Mô tả
 
-The Code Snippet can be used in two modes:
-
-### a) Text Editor Mode (Empty)
-
-If the `code-snippet` element is empty, it will function as a blank text editor. Simply click inside the editor and start typing or pasting your code.
-
-### b) Code Editor Mode (With Content)
-
-If the `code-snippet` element contains code content, it will function as a code editor, allowing you to edit the existing code.
-
-## 3. Customization
-
-You can customize the Code Snippet by adding additional HTML elements and scripts inside it. For example:
-
-```html
-<code-snippet>
-  <!-- Your custom HTML content goes here -->
-  <button>Run Code</button>
-  <p class="dice"></p>
-  <p class="dice"></p>
-  <p class="dice"></p>
-  <script>
-    // Your custom JavaScript code goes here
-  </script>
-</code-snippet>
+```javascript
+/**
+ * @fileoverview Code snippet component
+ * @description A custom HTML element for displaying and editing code snippets.
+ * @author Dương Nguyễn
+ */
 ```
 
-## 4. Resetting to Default
+Phần này chứa các chú thích dành cho file này. `@fileoverview` cung cấp một tóm tắt về nội dung của file. `@description` mô tả một cách ngắn gọn về custom element. `@author` cho biết tác giả của code.
 
-You can reset the Code Snippet to its default state by clicking the "Reset" button provided in the interface.
+## Phần 3: Tạo template cho nội dung code snippet
 
-## 5. Syntax Highlighting
-
-The Code Snippet uses the Dracula theme for syntax highlighting. You can customize the theme by modifying the `templateStyle` variable in the JavaScript code.
-
----
-
-By following these instructions, you can effectively use and customize the Code Snippet component to suit your needs. Happy coding!
-
----
-
-# Hướng dẫn sử dụng cho Code Snippet
-
-## Giới thiệu
-
-Thành phần Code Snippet cung cấp một môi trường linh hoạt để hiển thị và chỉnh sửa các đoạn code. Hướng dẫn này sẽ hướng dẫn bạn qua các hướng dẫn chi tiết về cách sử dụng và tùy chỉnh thành phần Code Snippet.
-
----
-
-## 1. Bắt đầu
-
-Để bắt đầu, hãy bao gồm phần tử `code-snippet` trong tệp HTML của bạn như sau:
-
-```html
-<code-snippet></code-snippet>
+```javascript
+const codeSnippetContent = document.createElement('template');
+codeSnippetContent.innerHTML = templateHTML;
 ```
 
-Hãy đảm bảo liên kết các tệp CSS và JavaScript cần thiết để thành phần hoạt động một cách chính xác.
+Tạo một template element (`<template>`) và gán nội dung của nó từ templateHTML.js.
 
-## 2. Sử dụng cơ bản
+## Phần 4: Class `CodeSnippet` và Shadow DOM
 
-Code Snippet có thể sử dụng ở hai chế độ:
-
-### a) Chế độ Trình soạn thảo văn bản (Trống)
-
-Nếu phần tử `code-snippet` trống, nó sẽ hoạt động như một trình soạn thảo văn bản trống. Đơn giản là nhấp vào trong trình soạn thảo và bắt đầu gõ hoặc dán code của bạn.
-
-### b) Chế độ Trình soạn thảo code (Có nội dung)
-
-Nếu phần tử `code-snippet` chứa nội dung code, nó sẽ hoạt động như một trình soạn thảo code, cho phép bạn chỉnh sửa code hiện tại.
-
-## 3. Tùy chỉnh
-
-Bạn có thể tùy chỉnh Code Snippet bằng cách thêm các phần tử HTML và đoạn code bên trong nó. Ví dụ:
-
-```html
-<code-snippet>
-  <!-- Nội dung HTML tùy chỉnh của bạn ở đây -->
-  <button>Chạy code</button>
-  <p class="dice"></p>
-  <p class="dice"></p>
-  <p class="dice"></p>
-  <script>
-    // Đoạn code JavaScript tùy chỉnh của bạn ở đây
-  </script>
-</code-snippet>
+```javascript
+function CodeSnippet() {
+  const shadowRoot = Reflect.construct(HTMLElement, [], this.constructor);
+  shadowRoot.attachShadow({ mode: 'open' });
+  // ...
+}
 ```
 
-## 4. Đặt lại về trạng thái mặc định <a name="resetting-to-default"></a>
+Đây là khai báo của một class có tên `CodeSnippet` được mở rộng từ `HTMLElement`. Trong hàm constructor, một shadow DOM được tạo ra và gắn vào element.
 
-Bạn có thể đặt lại Code Snippet về trạng thái mặc định bằng cách nhấp vào nút "Đặt lại" được cung cấp trong giao diện.
+## Phần 5: Hàm `loadScript` và Load các script
 
-## 5. Tô sáng cú pháp <a name="syntax-highlighting"></a>
+```javascript
+const loadScript = (src, type = 'text/javascript') => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    // ...
+  });
+};
 
-Code Snippet sử dụng chủ đề Dracula để tô sáng cú pháp. Bạn có thể tùy chỉnh chủ đề bằng cách chỉnh sửa biến `templateStyle` trong code JavaScript.
+loadScript(
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js'
+)
+  .then
+  // ...
+  ();
+```
 
----
+Hàm `loadScript` được định nghĩa để tải các tệp script từ một URL cụ thể và trả về một promise.
+
+## Phần 6: Khởi tạo CodeMirror và Các phần tử khác
+
+```javascript
+loadScript(
+  'https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js'
+).then(() =>
+  Promise.all([
+    // ...
+  ]).then(() => {
+    // ...
+  })
+);
+```
+
+Sau khi các script cần thiết được tải, CodeMirror được khởi tạo và một số phần tử DOM khác được lấy ra.
+
+## Phần 7: Gắn sự kiện và cập nhật iframe
+
+```javascript
+shadowRoot.CodeMirror.on(
+  'keyup',
+  shadowRoot.debounce(shadowRoot.updateIframe, 300).bind(shadowRoot)
+);
+
+CodeSnippet.prototype.updateIframe = function () {
+  const code = this.CodeMirror.getValue();
+  // ...
+};
+```
+
+Sự kiện `keyup` được gắn kết vào CodeMirror để theo dõi sự thay đổi trong code. Khi có thay đổi, hàm `updateIframe` được gọi để cập nhật nội dung của iframe.
+
+## Phần 8: Các hàm phụ trợ
+
+```javascript
+CodeSnippet.prototype.debounce = function (func, wait) {
+  // ...
+};
+
+CodeSnippet.prototype.createStyle = (content) => {
+  // ...
+};
+```
+
+Đây là các hàm phụ trợ cho việc xử lý sự kiện và tạo các phần tử DOM.
+
+## Phần 9: Các phương thức của `CodeSnippet`
+
+```javascript
+CodeSnippet.prototype.updateConsole = function (value) {
+  // ...
+};
+
+CodeSnippet.prototype.log = function (...args) {
+  // ...
+};
+
+CodeSnippet.prototype.reset = function () {
+  // ...
+};
+
+CodeSnippet.prototype.updateContent = async function (value) {
+  // ...
+};
+
+CodeSnippet.prototype.handleContent = async function (event) {
+  // ...
+};
+```
+
+Các phương thức này thực hiện các tác vụ cụ thể như cập nhật console, ghi log, reset, và cập nhật nội dung.
+
+## Phần 10: Định nghĩa custom element
+
+```javascript
+customElements.define('code-snippet', CodeSnippet);
+```
+
+Cuối cùng, custom element `code-snippet` được định nghĩa.
