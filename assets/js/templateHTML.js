@@ -7,10 +7,11 @@ const templateStyle = `@import url(https://cdnjs.cloudflare.com/ajax/libs/codemi
   border: none;
   outline: 0;
 }
+ *::selection{background-color:#baa4da25}
 .code-snippet {
   position: relative; 
   left: 50%;
-  transform: translate(-50%,0);
+  transform: translate(-50%);
   display: flex;
   background-color: #f2f2f2;
   height: 80vh;
@@ -21,12 +22,12 @@ const templateStyle = `@import url(https://cdnjs.cloudflare.com/ajax/libs/codemi
   margin: 12px 0;
 }
 .code-snippet .area {
-    position: relative;
-    height: 100%;
-    width: 45%;
-    overflow: hidden;
+  position: relative;
+  height: 100%;
+  width: 45%;
+  overflow: hidden;
 }
-.code-snippet button {
+.code-snippet button#consoleBtn {
   position: absolute;
   height: 30px;
   width: 60px;
@@ -38,10 +39,38 @@ const templateStyle = `@import url(https://cdnjs.cloudflare.com/ajax/libs/codemi
   border-radius: 2px;
   cursor: pointer;
 }
-.code-snippet iframe {
+.code-snippet button#resetBtn {
+  position: absolute;
+  height: 30px;
+  width: 60px;
+  background-color: #baa4da20;
+  color: #f2f2f2;
+  top: 4px;
+  right: 68px;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.code-snippet iframe#webview {
   height: 100%;
   width: 55%;
+}
+.code-snippet div#console {
+  position: fixed;
+  height: 0%;
+  width: 55%;
   border-radius: 12px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  right: 0;
+  bottom: 0;
+  transition: all 0.3s ease-in-out;
+}
+.code-snippet div#console.show {
+  height: 40%;
+  padding: 1rem;
+  overflow: hidden auto;
 }
 .code-snippet h1 {
   width: 100%;
@@ -58,16 +87,17 @@ const templateStyle = `@import url(https://cdnjs.cloudflare.com/ajax/libs/codemi
   cursor: pointer;
 }
 .code-snippet .CodeMirror {
-    width: 100%;
-    height: calc(100% - 38px);
+  width: 100%;
+  height: calc(100% - 36px);
   background-color: #191a2e !important;
   font-size: 16px;
   border-radius: 12px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .code-snippet .cm-s-dracula .CodeMirror-gutters {
-  background-color: #baa4da20 !important;
+  background-color: #2d2c43 !important;
   border-radius: 8px;
 }
 .code-snippet .cm-s-dracula .CodeMirror-linenumber {
@@ -84,8 +114,11 @@ const templateHTML = `<style>${templateStyle}</style>
       title="Hi, mình là Dương Nguyễn, mình làm cái code snippet này đó hihi ^^">
       Code Snippet
     </h1>
-    <textarea id="code"></textarea><button title="Reset code">Reset</button>
+    <textarea id="code"></textarea>
+    <button title="Reset code" id="resetBtn">Reset</button>
+    <button title="Open console" id="consoleBtn">Console</button>
   </div>
-  <iframe></iframe>
+  <iframe id="webview"></iframe>
+  <div id="console"></div>
 </div>
 `;

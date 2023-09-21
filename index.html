@@ -11,45 +11,16 @@
     <title>Code Snippet</title>
   </head>
   <body>
-    <code-snippet></code-snippet>
     <code-snippet>
-      <button>Run Code</button>
-      <p class="dice"></p>
-      <p class="dice"></p>
-      <p class="dice"></p>
+      <button href="#" id="tagA">Click me !</button>
       <script>
         const btn = document.querySelector('button');
-        const dice = document.querySelectorAll('.dice');
-        const sides = ['Một', 'Hai', 'Ba', 'Bốn', 'Năm', 'Sáu'];
-        const roll = () => {
-          const random = Math.floor(Math.random() * sides.length);
-          return sides[random];
-        };
-        btn.onclick = () => {
-          const start = performance.now();
-
-          let previousTime = 0,
-            startTime = performance.now(),
-            stop = false;
-          const duration = 100,
-            timeout = 1500;
-          const update = (currentTime) => {
-            if (currentTime - previousTime >= duration && !stop) {
-              dice.forEach((die) => {
-                die.className = 'dice';
-                die.innerText = roll();
-              });
-              previousTime = currentTime;
-            }
-            if (currentTime - startTime <= timeout)
-              requestAnimationFrame(update);
-            else stop = true;
-          };
-          requestAnimationFrame(update);
+        btn.onclick = function () {
+          console.log(btn);
         };
       </script>
     </code-snippet>
     <script src="assets/js/templateHTML.js"></script>
-    <script src="assets/js/index.js"></script>
+    <script src="assets/js/index.js" type="module"></script>
   </body>
 </html>
