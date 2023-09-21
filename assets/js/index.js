@@ -174,10 +174,11 @@ function CodeSnippet() {
         'click',
         shadowRoot.reset.bind(shadowRoot)
       );
-      shadowRoot.consoleButton.addEventListener('click', () =>
-        shadowRoot.divConsole.classList.toggle('show')
+      shadowRoot.consoleButton.addEventListener(
+        'click',
+        shadowRoot.toggleConsole.bind(shadowRoot)
       );
-      shadowRoot.shadowRoot.addEventListener(
+      shadowRoot.addEventListener(
         'keydown',
         shadowRoot.handleContent.bind(shadowRoot)
       );
@@ -251,7 +252,9 @@ CodeSnippet.prototype.updateConsole = function (value) {
   const consoleDiv = this.divConsole;
   consoleDiv.textContent = '';
   this.lineConsole = 1;
-  if (trimmed === '') return;
+  if (trimmed === '') {
+    return;
+  }
   const consoleCode = trimmed.replace(/\r\n /g, '\n');
   console.log = this.log.bind(this); // Ghi đè console.log
   const scriptCodes = consoleCode.match(/<script>(.*?)<\/script>/gs);
@@ -304,6 +307,10 @@ CodeSnippet.prototype.updateContent = async function (value) {
   this.updateIframe();
 };
 
+CodeSnippet.prototype.toggleConsole = function () {
+  this.divConsole.classList.toggle('show');
+};
+
 /**
  * Handles keydown events for the content.
  * @param {Event} event - The keydown event.
@@ -333,10 +340,13 @@ CodeSnippet.prototype.handleContent = async function (event) {
     }
     if (event.key === '/') {
       event.preventDefault();
-
       this.CodeMirror.toggleComment({
         indent: true,
       });
+    }
+    if (event.key === '`') {
+      event.preventDefault();
+      this.toggleConsole();
     }
   }
   if (event.altKey && event.shiftKey) {
