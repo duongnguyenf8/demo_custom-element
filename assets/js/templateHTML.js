@@ -70,7 +70,7 @@ const templateStyle = `@import url(https://cdnjs.cloudflare.com/ajax/libs/codemi
 .code-snippet div#console.show {
   height: 40%;
   padding: 1rem;
-  overflow: hidden auto;
+  overflow: auto auto;
 }
 .code-snippet h1 {
   width: 100%;
