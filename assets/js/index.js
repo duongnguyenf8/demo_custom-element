@@ -275,7 +275,7 @@ CodeSnippet.prototype.log = function (...args) {
   const consoleDiv = this.divConsole;
   const logContent = log(...args);
   consoleDiv.innerHTML += `
-  <a class="error" href="https://fullstack.evu.vn" target="_blank">${this
+  <a class="error" href="https://fullstack.edu.vn" target="_blank">${this
     .lineConsole++}: 
     <span class="success">from ${this.constructor.name} </span>
     <span class="link">to ${this}</span>
