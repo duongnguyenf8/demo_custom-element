@@ -311,6 +311,17 @@ CodeSnippet.prototype.toggleConsole = function () {
   this.divConsole.classList.toggle('show');
 };
 
+/** */
+
+CodeSnippet.prototype.formatCode = async function () {
+  const code = this.CodeMirror.getValue();
+  const formattedCode = await prettier.format(code, {
+    parser: 'html',
+    plugins: prettierPlugins,
+  });
+  this.updateContent(formattedCode);
+};
+
 /**
  * Handles keydown events for the content.
  * @param {Event} event - The keydown event.
@@ -319,8 +330,9 @@ CodeSnippet.prototype.handleContent = async function (event) {
   if (event.ctrlKey || event.metaKey) {
     if (event.key === 's') {
       event.preventDefault();
+      this.formatCode();
       const code = this.CodeMirror.getValue();
-      const fileName = code.replaceAll(' ', '').slice(0, 5);
+      const fileName = code.replaceAll(' ', '').slice(0, 5) || 'untitled';
       const fileContent = code;
       navigator.clipboard.writeText(fileContent);
       const blob = new Blob([fileContent], {
@@ -335,7 +347,6 @@ CodeSnippet.prototype.handleContent = async function (event) {
     }
     if (event.key === 'r') {
       event.preventDefault();
-
       this.reset();
     }
     if (event.key === '/') {
@@ -344,20 +355,17 @@ CodeSnippet.prototype.handleContent = async function (event) {
         indent: true,
       });
     }
-    if (event.key === '`') {
+    if (event.key === 'Dead') {
       event.preventDefault();
       this.toggleConsole();
     }
   }
   if (event.altKey && event.shiftKey) {
-    // format code with prettier lib
-    event.preventDefault();
-    const code = this.CodeMirror.getValue();
-    const formattedCode = await prettier.format(code, {
-      parser: 'html',
-      plugins: prettierPlugins,
-    });
-    this.updateContent(formattedCode);
+    if (event.key === 'F') {
+      // format code with prettier lib
+      event.preventDefault();
+      this.formatCode();
+    }
   }
 };
 
