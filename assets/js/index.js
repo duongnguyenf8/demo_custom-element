@@ -136,6 +136,7 @@ function CodeSnippet() {
           }
           #console code{width:100%}
           #console .error{color:#f55}
+          #console .warn{color:#fad500}
           #console .success{color: #20E3B2;}
           #console .link{color:#58a6ff;text-decoration:none}
           #console * {
@@ -256,7 +257,19 @@ CodeSnippet.prototype.updateConsole = function (value) {
     return;
   }
   const consoleCode = trimmed.replace(/\r\n /g, '\n');
-  console.log = this.log.bind(this); // Ghi đè console.log
+  const _this = this;
+  console.log = function (...args) {
+    _this.log('', ...args);
+  };
+  console.error = function (...args) {
+    _this.log('error', ...args);
+  };
+  console.warn = function (...args) {
+    _this.log('warn', ...args);
+  };
+  console.info = function (...args) {
+    _this.log('link', ...args);
+  };
   const scriptCodes = consoleCode.match(/<script>(.*?)<\/script>/gs);
   if (scriptCodes) {
     scriptCodes.forEach((scriptCode) => {
@@ -267,11 +280,17 @@ CodeSnippet.prototype.updateConsole = function (value) {
         .replace('let', 'var')
         .replace('document', 'this.iframeWebview.contentDocument');
       eval(DOMinCode);
+      if (DOMinCode.includes('console.')) {
+        this.divConsole.classList.add('show');
+      }
     });
   }
   console.log = window.console.log; // Khôi phục lại console.log mặc định
+  console.error = window.console.error; // Khôi phục lại console.error mặc định
+  console.warn = window.console.warn; // Khôi phục lại console.warn mặc định
+  console.info = window.console.info; // Khôi phục lại console.info mặc định
 };
-CodeSnippet.prototype.log = function (...args) {
+CodeSnippet.prototype.log = function (type = '', ...args) {
   const consoleDiv = this.divConsole;
   const logContent = log(...args);
   consoleDiv.innerHTML += `
@@ -280,7 +299,7 @@ CodeSnippet.prototype.log = function (...args) {
     <span class="success">from ${this.constructor.name} </span>
     <span class="link">to ${this}</span>
   </a>
-  ${logContent}<br/><br/>`;
+  <div class=${type}>${logContent}</div><br/><br/>`;
 };
 
 /**
@@ -311,7 +330,9 @@ CodeSnippet.prototype.toggleConsole = function () {
   this.divConsole.classList.toggle('show');
 };
 
-/** */
+/**
+ * This function formats the code in the CodeMirror editor using Prettier.
+ */
 
 CodeSnippet.prototype.formatCode = async function () {
   const code = this.CodeMirror.getValue();
