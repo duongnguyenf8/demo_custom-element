@@ -202,3 +202,5 @@ Tương tự như một **'VS Code'** đơn giản, có thể sử dụng một 
 - **Shift + Alt + F** -> Format lại code như extension Prettier trong **'VS Code'**
 
 - **Ctrl + S** -> Lưu lại file HTML kèm với Style, Script trong tab code được focus hoặc trong tab view được focus
+
+- **Ctrl + Alt + Click** -> Multiple cursors giống trong VS code
