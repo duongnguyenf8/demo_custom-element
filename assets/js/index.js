@@ -145,6 +145,10 @@ function CodeSnippet() {
           #console::-webkit-scrollbar {
             width: 0
           }
+          #console hr {
+            border-bottom: 1px solid #baa4da40;
+            margin-bottom: 20px;
+          }
           `
       );
       shadowRoot.divConsole.parentElement.insertBefore(
@@ -294,12 +298,12 @@ CodeSnippet.prototype.log = function (type = '', ...args) {
   const consoleDiv = this.divConsole;
   const logContent = log(...args);
   consoleDiv.innerHTML += `
-  <a class="error" href="https://fullstack.edu.vn" target="_blank">${this
+  <a class="link" href="https://fullstack.edu.vn" target="_blank">${this
     .lineConsole++}: 
-    <span class="success">from ${this.constructor.name} </span>
-    <span class="link">to ${this}</span>
+    <span class="success">${this.constructor.name} </span>
+    <span class="warn">say: </span>
   </a>
-  <div class=${type}>${logContent}</div><br/><br/>`;
+  <div class=${type}>${logContent}</div><hr/>`;
 };
 
 /**
