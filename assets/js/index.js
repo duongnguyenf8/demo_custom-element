@@ -376,7 +376,7 @@ CodeSnippet.prototype.handleContent = async function (event) {
         indent: true,
       });
     }
-    if (event.key === 'Dead') {
+    if (event.key === 'Dead' || event.key === '`') {
       event.preventDefault();
       this.toggleConsole();
     }
